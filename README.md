@@ -52,7 +52,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_html_latex: ^1.0.0
+  flutter_html_latex: ^0.1.0+1
 ```
 
 ## Project Setup (Required)
