@@ -1,67 +1,65 @@
 # flutter_html_latex
 
-`flutter_html_latex` হলো Flutter HTML content এর ভিতরে LaTeX equation render করার একটি production-ready package।
+`flutter_html_latex` is a production-ready Flutter package for rendering LaTeX equations within HTML content. It provides seamless math equation support with multiple rendering backends and comprehensive customization options.
 
-এই package এ:
+## Features
 
-- Primary renderer: `flutter_math_fork` (KaTeX-style, fast, clean layout)
-- Fallback renderer: `flutter_tex` (MathJax-based complex formulas)
-- User-friendly widget API: `HtmlLatex(...)`
+- **Dual Rendering Engines**: Primary `flutter_math_fork` (KaTeX-style, fast, clean) with fallback to `flutter_tex` (MathJax-based, complex formulas)
+- **User-Friendly API**: Simple `HtmlLatex(...)` widget for HTML + LaTeX content
+- **Flexible Configuration**: Extensive customization with presets for different use cases
+- **Error Handling**: Graceful fallbacks and custom error widgets
+- **Responsive Layout**: Automatic handling of wide equations with scrolling support
+- **Global Compatibility**: Support for various LaTeX delimiters and HTML patterns
 
-## কেন এই package?
+## Why This Package?
 
-অনেক API/CMS এইভাবে equation দেয়:
+Many APIs and CMS platforms deliver equations in HTML like this:
 
 ```html
 <span class="math-tex">\(x^2 + 2x + 1\)</span>
 ```
 
-`flutter_widget_from_html_core` একা এটা render করে না।
-`flutter_html_latex` এই gap fill করে এবং customization দেয়।
+While `flutter_widget_from_html_core` handles HTML rendering, it doesn't render LaTeX equations. `flutter_html_latex` fills this gap with intelligent equation detection and rendering.
+
+## Demo
+
+### MathJax Supported: false (KaTeX-first mode)
+![KaTeX Mode](https://raw.githubusercontent.com/avijitbarua/flutter_html_latex/refs/heads/main/demos/MathJax-Supported-false.png)
+
+### MathJax Supported: true (MathJax-aware mode)
+![MathJax Mode](https://raw.githubusercontent.com/avijitbarua/flutter_html_latex/refs/heads/main/demos/MathJax-Supported-true.png)
 
 ## Renderer Strategy (Important)
 
-Default behavior এখন:
+The package uses an intelligent strategy to choose the best renderer:
 
-- `mathJaxSupported = false` (default)
-- Meaning: `flutter_math_fork` কে prefer করবে
-- Only hard error হলে fallback যাবে
+### Default Behavior (`mathJaxSupported: false`)
+- **Best For**: KaTeX-compatible content
+- **Strategy**: Prefers `flutter_math_fork` for optimal quality and performance
+- **Fallback**: Only switches to `flutter_tex` on rendering errors
+- **Ideal When**: Your data consists mostly of standard LaTeX equations
 
-যখন data MathJax generated (যেমন inline `aligned`, `equation`) তখন:
-
-- `mathJaxSupported = true` use করা recommended
-- risky pattern হলে আগে থেকেই `flutter_tex` path এ যাবে
-
-## Demo Images
-
-Repository demo screenshots:
-
-- `demos/MathJax-Supported-false.png`
-- `demos/MathJax-Supported-true.png`
-
-Quick understanding:
-
-1. `mathJaxSupported: false`
-   - KaTeX-style content এর জন্য best quality + alignment
-   - কিছু MathJax-only pattern problematic হতে পারে
-2. `mathJaxSupported: true`
-   - MathJax-heavy content safer
-   - fallback usage বেশি হতে পারে
+### MathJax-Aware Mode (`mathJaxSupported: true`)
+- **Best For**: MathJax-generated content (with `aligned`, `equation` environments)
+- **Strategy**: Uses heuristics to detect complex patterns that need MathJax
+- **Benefit**: Safer handling of advanced LaTeX environments
+- **Trade-off**: More frequent use of the fallback renderer
+- **Ideal When**: Data includes complex aligned environments or MathJax-specific patterns
 
 ## Installation
 
-`pubspec.yaml` এ:
+Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
   flutter_html_latex: ^1.0.0
 ```
 
-## Project Setup (Must Read)
+## Project Setup (Required)
 
-### 1) main.dart পরিবর্তন
+### 1) Initialize Runtime in main.dart
 
-`runApp` এর আগে runtime initialize করো:
+Before calling `runApp()`, initialize the runtime:
 
 ```dart
 import 'package:flutter_html_latex/flutter_html_latex.dart';
@@ -73,9 +71,9 @@ Future<void> main() async {
 }
 ```
 
-### 2) AndroidManifest.xml পরিবর্তন
+### 2) Android Configuration (Recommended)
 
-`example/android/app/src/main/AndroidManifest.xml` এর `<application>` tag এ এটা add করা recommended:
+In `example/android/app/src/main/AndroidManifest.xml`, add this to the `<application>` tag:
 
 ```xml
 <application
@@ -96,69 +94,83 @@ HtmlLatex(
 )
 ```
 
-## HtmlLatex Parameters বিস্তারিত
+## HtmlLatex Widget Parameters
 
-`HtmlLatex(data, ...)` constructor:
+### Constructor Parameters
 
-1. `data` (`String`, required)
-   - HTML string input
+`HtmlLatex(data, ...)` supports the following parameters:
 
-2. `style` (`TextStyle?`)
-   - default equation style
-   - color, fontSize, fontFamily, fontWeight, fontStyle, letterSpacing, wordSpacing, decoration map হয়
+1. **`data`** (`String`, required)
+   - HTML string containing LaTeX equations
+   - Supports multiple delimiter formats
 
-3. `config` (`LatexHtmlWidgetFactoryConfig?`)
-   - low-level advanced config pass করতে
+2. **`style`** (`TextStyle?`)
+   - Default text styling applied to equation content
+   - Supports: color, fontSize, fontFamily, fontWeight, fontStyle, letterSpacing, wordSpacing, decoration
 
-4. `customStylesBuilder` (`Map<String, String>? Function(dynamic)?`)
-   - element ভিত্তিক CSS map return
+3. **`config`** (`LatexHtmlWidgetFactoryConfig?`)
+   - Low-level advanced configuration for fine-tuned control
 
-5. `customMathBuilder` (`Widget? Function(String, LatexStyleData)?`)
-   - specific formula custom widget দিয়ে override
+4. **`customStylesBuilder`** (`Map<String, String>? Function(dynamic)?`)
+   - Per-element CSS customization based on HTML attributes
 
-6. `onMathError` (`Widget? Function(Object, String)?`)
-   - render error হলে custom widget
+5. **`customMathBuilder`** (`Widget? Function(String, LatexStyleData)?`)
+   - Override specific formulas with custom widgets
 
-7. `enableFallback` (`bool?`)
-   - `flutter_math_fork` error হলে `flutter_tex` fallback হবে কি না
+6. **`onMathError`** (`Widget? Function(Object, String)?`)
+   - Custom widget displayed when equation rendering fails
 
-8. `mathJaxSupported` (`bool?`)
-   - `false`: KaTeX-first mode (default behavior)
-   - `true`: MathJax-aware heuristics enabled
+7. **`enableFallback`** (`bool?`)
+   - Enable/disable fallback from `flutter_math_fork` to `flutter_tex`
+   - Default: `true` (fallback enabled)
 
-9. `responsiveLayout` (`bool?`)
-   - wide equation হলে horizontal scroll wrapper
+8. **`mathJaxSupported`** (`bool?`)
+   - `false` (default): KaTeX-first mode, optimal for standard LaTeX
+   - `true`: MathJax-aware mode, better for complex environments
 
-10. `fallbackScaleInline` (`double?`)
-    - inline fallback size normalize
+9. **`responsiveLayout`** (`bool?`)
+   - Enable horizontal scroll wrapper for wide equations
+   - Default: `true`
 
-11. `fallbackScaleBlock` (`double?`)
-    - block fallback size normalize
+10. **`fallbackScaleInline`** (`double?`)
+    - Scale factor for inline fallback equations
+    - Default: `0.86`
 
-12. `fallbackVerticalPadding` (`double?`)
-    - fallback equation vertical rhythm ঠিক করার জন্য
+11. **`fallbackScaleBlock`** (`double?`)
+    - Scale factor for block fallback equations
+    - Default: `0.92`
+
+12. **`fallbackVerticalPadding`** (`double?`)
+    - Vertical padding adjustment for fallback equations
+    - Default: `2.0`
 
 ## LatexHtmlWidgetFactoryConfig Parameters
 
-`LatexHtmlWidgetFactoryConfig(...)`:
+For advanced configuration, use `LatexHtmlWidgetFactoryConfig`:
 
-1. `baseFontSize` (default `12.0`)
-2. `defaultColor`
-3. `defaultFontFamily`
-4. `customStylesBuilder`
-5. `customMathBuilder`
-6. `onMathError`
-7. `enableFallback` (default `true`)
-8. `mathJaxSupported` (default `false`)
-9. `responsiveLayout` (default `true`)
-10. `fallbackScaleInline` (default `0.86`)
-11. `fallbackScaleBlock` (default `0.92`)
-12. `fallbackVerticalPadding` (default `2.0`)
-13. `hyphenationCharacter` (default soft-hyphen)
+```dart
+LatexHtmlWidgetFactoryConfig(
+  baseFontSize: 12.0,
+  defaultColor: Colors.black,
+  defaultFontFamily: 'Roboto',
+  customStylesBuilder: (element) => {},
+  customMathBuilder: (formula, style) => null,
+  onMathError: (error, formula) => null,
+  enableFallback: true,
+  mathJaxSupported: false,
+  responsiveLayout: true,
+  fallbackScaleInline: 0.86,
+  fallbackScaleBlock: 0.92,
+  fallbackVerticalPadding: 2.0,
+  hyphenationCharacter: '\u00AD', // soft hyphen
+)
+```
 
-## Recommended Presets
+## Recommended Configuration Presets
 
-### Preset A: KaTeX-first (recommended default)
+### Preset A: KaTeX-First (Default - Recommended)
+
+Best for standard LaTeX content with optimal performance:
 
 ```dart
 HtmlLatex(
@@ -168,12 +180,14 @@ HtmlLatex(
 )
 ```
 
-Use when:
+**Use When:**
+- Your data primarily contains standard LaTeX equations
+- You want maximum performance and visual quality
+- MathJax-specific patterns are not expected
 
-- তোমার data mostly KaTeX compatible
-- তুমি `flutter_math_fork` quality/performance maximize করতে চাও
+### Preset B: MathJax-Heavy Content
 
-### Preset B: MathJax-heavy content
+Better support for complex MathJax environments:
 
 ```dart
 HtmlLatex(
@@ -186,51 +200,79 @@ HtmlLatex(
 )
 ```
 
-Use when:
+**Use When:**
+- Data frequently includes `aligned`, `equation`, or `gather` environments
+- You want safer handling of potentially problematic formulas
+- Rendering quality is more important than performance
 
-- data-তে `aligned`, `equation` ইত্যাদি frequent
-- freeze/crash-risk formulas safely render করতে চাও
+## Supported HTML Patterns
 
-## Supported HTML Targets
-
-Package এই pattern detect করে:
+The package automatically detects and renders equations in these HTML patterns:
 
 ```html
+<!-- Class-based patterns -->
 <span class="math-tex">\( ... \)</span>
 <span class="math-display">\[ ... \]</span>
 <span class="math-inline">\( ... \)</span>
+
+<!-- Custom math elements -->
 <math>\( ... \)</math>
 ```
 
 ## Supported Delimiters
 
-- `\(...\)`
-- `\[...\]`
-- `$...$`
-- `$$...$$`
+The package recognizes these LaTeX delimiters:
+
+- **Inline Math**: `\(...\)` or `$...$`
+- **Display Math**: `\[...\]` or `$$...$$`
 
 ## Troubleshooting
 
-1. Equation freeze/crash in debug
-   - `mathJaxSupported: true` করে দেখো
-   - `enableFallback: true` আছে কিনা নিশ্চিত করো
+### Issue: Equations freeze or crash in debug mode
 
-2. Fallback equation size mismatch
-   - `fallbackScaleInline`, `fallbackScaleBlock`, `fallbackVerticalPadding` tune করো
+**Solution:**
+```dart
+HtmlLatex(
+  data,
+  mathJaxSupported: true,  // Switch to MathJax mode
+  enableFallback: true,    // Ensure fallback is enabled
+)
+```
 
-3. Formula not rendering
-   - delimiter syntax check করো
-   - malformed LaTeX কিনা check করো
+### Issue: Fallback equation size doesn't match
 
-## Example Toggle (from example app)
+**Solution:** Adjust scaling parameters:
+```dart
+HtmlLatex(
+  data,
+  fallbackScaleInline: 0.84,      // Adjust inline scale
+  fallbackScaleBlock: 0.90,        // Adjust block scale
+  fallbackVerticalPadding: 1.5,    // Adjust vertical spacing
+)
+```
+
+### Issue: Formula not rendering
+
+**Checklist:**
+- Verify delimiter syntax is correct (`\(`, `\[`, `$`, `$$`)
+- Ensure LaTeX is valid (check for typos or unsupported commands)
+- Check if content is inside the correct HTML class (`math-tex`, `math-display`, etc.)
+- Enable `mathJaxSupported: true` if using complex environments
+
+## Example Implementation
+
+From the example app:
 
 ```dart
-const kMathJaxSupported = true; // false / true switch
+const kMathJaxSupported = true; // Switch: false / true
 
 HtmlLatex(
   item.explanation,
   mathJaxSupported: kMathJaxSupported,
-  style: const TextStyle(fontSize: 15, color: Colors.black87),
+  style: const TextStyle(
+    fontSize: 15,
+    color: Colors.black87,
+  ),
   fallbackScaleInline: 0.84,
   fallbackScaleBlock: 0.90,
   fallbackVerticalPadding: 1.5,
@@ -239,4 +281,4 @@ HtmlLatex(
 
 ## License
 
-MIT License. See `LICENSE`.
+MIT License. See [LICENSE](LICENSE) for details.
