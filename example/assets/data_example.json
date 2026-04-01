@@ -1,5 +1,4 @@
 {
-  "count": 59,
   "data": [
     {
       "ID": 1451,
@@ -651,7 +650,5 @@
       "question": "\u003Cspan class=\"math-tex\"\u003E\\(f(x)=\\sqrt{3-\\sqrt{x-2}}\\)\u003C/span\u003E&nbsp;ফাংশনটির ডোমেন কত?",
       "subject": "উচ্চতর গণিত"
     }
-  ],
-  "exam_id": "xe4r",
-  "status": "success"
+  ]
 }
