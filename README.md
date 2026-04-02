@@ -1,6 +1,13 @@
 # flutter_html_latex
 
-`flutter_html_latex` is a production-ready Flutter package for rendering LaTeX equations within HTML content. It provides seamless math equation support with multiple rendering backends and comprehensive customization options.
+[![pub package](https://img.shields.io/pub/v/flutter_html_latex.svg?label=flutter_html_latex&color=blue)](https://pub.dev/packages/flutter_html_latex)
+[![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/avijitbarua/flutter_html_latex.svg?style=social&label=Stars)](https://github.com/avijitbarua/flutter_html_latex)
+[![GitHub forks](https://img.shields.io/github/forks/avijitbarua/flutter_html_latex.svg?style=social&label=Forks)](https://github.com/avijitbarua/flutter_html_latex)
+
+**A production-ready Flutter package for rendering LaTeX equations within HTML content.**
+
+`flutter_html_latex` provides seamless math equation support with multiple rendering backends and comprehensive customization options for Mathematics, Physics, Chemistry, and advanced academic content.
 
 ## Features
 
@@ -10,6 +17,27 @@
 - **Error Handling**: Graceful fallbacks and custom error widgets
 - **Responsive Layout**: Automatic handling of wide equations with scrolling support
 - **Global Compatibility**: Support for various LaTeX delimiters and HTML patterns
+- **Production Ready**: Battle-tested with comprehensive error handling and fallback mechanisms
+
+## Quick Links
+
+- 📦 **[Pub.dev Package](https://pub.dev/packages/flutter_html_latex)** - View on pub.dev
+- 🔗 **[GitHub Repository](https://github.com/avijitbarua/flutter_html_latex)** - Source code and issue tracker
+- 📖 **[Documentation](https://pub.dev/packages/flutter_html_latex/versions)** - Full API documentation
+- 📋 **[Changelog](CHANGELOG.md)** - Version history and updates
+
+## Table of Contents
+
+- [Features](#features)
+- [Why This Package?](#why-this-package)
+- [Demo](#demo)
+- [Installation](#installation)
+- [Project Setup](#project-setup-required)
+- [Quick Usage](#quick-usage)
+- [Configuration](#htmlatex-widget-parameters)
+- [Presets](#recommended-configuration-presets)
+- [Troubleshooting](#troubleshooting)
+- [License](#license)
 
 ## Why This Package?
 
@@ -282,3 +310,40 @@ HtmlLatex(
 ## License
 
 MIT License. See [LICENSE](LICENSE) for details.
+
+## Author
+
+**Avijit Barua**
+- GitHub: [@avijitbarua](https://github.com/avijitbarua)
+- Email: [Contact](https://github.com/avijitbarua)
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit issues and pull requests on [GitHub](https://github.com/avijitbarua/flutter_html_latex).
+
+### Development Setup
+
+```bash
+git clone https://github.com/avijitbarua/flutter_html_latex.git
+cd flutter_html_latex
+flutter pub get
+flutter test
+```
+
+## Support
+
+If you encounter any issues or have questions:
+1. Check the [Troubleshooting](#troubleshooting) section
+2. Open an [issue on GitHub](https://github.com/avijitbarua/flutter_html_latex/issues)
+3. Check the [example app](example/) for implementation reference
+
+## Dependencies
+
+This package builds upon these excellent libraries:
+- [`flutter_widget_from_html_core`](https://pub.dev/packages/flutter_widget_from_html_core) - HTML rendering core
+- [`flutter_math_fork`](https://pub.dev/packages/flutter_math_fork) - KaTeX-style math rendering
+- [`flutter_tex`](https://pub.dev/packages/flutter_tex) - MathJax-based math rendering
+
+---
+
+**Star ⭐ this repository if you find it helpful!**
